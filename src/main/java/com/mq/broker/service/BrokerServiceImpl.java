@@ -1,6 +1,6 @@
-package com.mq.service;
+package com.mq.broker.service;
 
-import com.mq.broker.Broker;
+import com.mq.broker.common.Broker;
 import com.mq.common.message.Message;
 import com.mq.common.message.MessageType;
 
@@ -17,7 +17,7 @@ public class BrokerServiceImpl implements BrokerService {
         this.broker=broker;
     }
 
-    public List<Message> sendToBrokerBatch(List<Message> messages){
+    public List<Message> sendToBrokerBatch(List<Message> messages,Integer queueIndex){
         ArrayList<Message> result = new ArrayList<>();
         for(Message message:messages){
             Message message1=sendToBroker(message);

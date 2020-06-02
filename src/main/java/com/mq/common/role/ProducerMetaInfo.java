@@ -3,14 +3,14 @@ package com.mq.common.role;
 /**
  * Created By xfj on 2020/3/16
  */
-public class ProducerInfo extends RoleInfo{
+public class ProducerMetaInfo extends RoleMetaInfo {
 
     //broker注册信息
-    public ProducerInfo() {
+    public ProducerMetaInfo() {
         this.role="producer";
     }
 
-    public ProducerInfo(String name) {
+    public ProducerMetaInfo(String name) {
         this.name = name;
         this.role="producer";
     }

@@ -1,4 +1,4 @@
-package com.mq.broker;
+package com.mq.broker.common;
 
 import com.mq.common.message.Message;
 
@@ -12,9 +12,6 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * Created By xfj on 2020/3/15
  */
 public class MyQueue implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    volatile static int count = 1;//测试
     private ConcurrentLinkedDeque<Message> queue;
 
     public MyQueue() {

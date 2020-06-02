@@ -1,6 +1,6 @@
 package com.mq.rigister;
 
-import com.mq.common.role.RoleInfo;
+import com.mq.common.role.RoleMetaInfo;
 
 import java.util.HashMap;
 
@@ -12,9 +12,9 @@ public class DefaultRoleRegister implements RoleRegister {
   HashMap<String,String> map=new HashMap<String,String>();
 
   @Override
-  public void rigisterRole(RoleInfo roleInfo){
-      if(roleInfo==null)return;
-      map.put(roleInfo.getRole(),roleInfo.getName());
+  public void rigisterRole(RoleMetaInfo roleMetaInfo){
+      if(roleMetaInfo ==null)return;
+      map.put(roleMetaInfo.getRole(), roleMetaInfo.getName());
   }
 
 }

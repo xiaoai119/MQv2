@@ -3,12 +3,12 @@ package com.mq.common.role;
 /**
  * Created By xfj on 2020/3/17
  */
-public class LoadBalanceInfo extends RoleInfo {
-    public LoadBalanceInfo() {
+public class LoadBalanceMetaInfo extends RoleMetaInfo {
+    public LoadBalanceMetaInfo() {
         this.setName("loadbalance");
     }
 
-    public LoadBalanceInfo(String ip, int port, String name) {
+    public LoadBalanceMetaInfo(String ip, int port, String name) {
         this.ip = ip;
         this.port = port;
         this.name = name;

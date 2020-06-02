@@ -5,17 +5,17 @@ import java.util.List;
 /**
  * Created By xfj on 2020/3/15
  */
-public class BrokerInfo extends RoleInfo {
+public class BrokerMetaInfo extends RoleMetaInfo {
     List<String> topics;
     //broker注册信息
 
-    public BrokerInfo(String ip, int port) {
+    public BrokerMetaInfo(String ip, int port) {
         this.ip = ip;
         this.port = port;
         this.role="broker";
     }
 
-    public BrokerInfo(String ip, int port, String name,List<String> tl) {
+    public BrokerMetaInfo(String ip, int port, String name, List<String> tl) {
         this.ip = ip;
         this.port = port;
         this.topics = tl;

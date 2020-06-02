@@ -3,7 +3,7 @@ package com.mq.common.role;
 /**
  * Created By xfj on 2020/3/16
  */
-public class RoleInfo {
+public class RoleMetaInfo {
     String role;//broker,producer,consumer
     String name;
     String ip;

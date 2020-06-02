@@ -23,14 +23,14 @@ public class ClientStubProxyFactory {
 
 	private NetClient netClient;
 
-	private Map<Class<?>, Object> objectCache = new HashMap<>();
+	private Map<String, Object> objectCache = new HashMap<>();
 
 	public <T> T getProxy(Class<T> interf) {
-		T obj = (T) this.objectCache.get(interf);
+		T obj = (T) this.objectCache.get(interf.getName());
 		if (obj == null) {
 			obj = (T) Proxy.newProxyInstance(interf.getClassLoader(), new Class<?>[] { interf },
 					new ClientStubInvocationHandler(interf));
-			this.objectCache.put(interf, obj);
+			this.objectCache.put(interf.getName(), obj);
 		}
 
 		return obj;
@@ -38,11 +38,11 @@ public class ClientStubProxyFactory {
 
 
 	public <T> T getProxy(Class<T> interf,String routeKey) {
-		T obj = (T) this.objectCache.get(interf);
+		T obj = (T) this.objectCache.get(interf.getName()+routeKey);
 		if (obj == null) {
 			obj = (T) Proxy.newProxyInstance(interf.getClassLoader(), new Class<?>[] { interf },
 					new ClientStubInvocationHandler(interf,routeKey));
-			this.objectCache.put(interf, obj);
+			this.objectCache.put(interf+routeKey, obj);
 		}
 
 		return obj;

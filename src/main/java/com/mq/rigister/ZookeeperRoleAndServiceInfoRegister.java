@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.rpc.discovery.ServiceInfo;
 import com.rpc.server.register.*;
 import com.rpc.util.PropertiesUtils;
-import com.mq.common.role.RoleInfo;
+import com.mq.common.role.RoleMetaInfo;
 import org.I0Itec.zkclient.ZkClient;
 
 import java.io.UnsupportedEncodingException;
@@ -26,22 +26,22 @@ public class ZookeeperRoleAndServiceInfoRegister extends DefaultServiceRegister 
         client.setZkSerializer(new MyZkSerializer());
     }
 
-    public void registerRole(RoleInfo roleInfo){
-        getRoleUri(roleInfo);
+    public void registerRole(RoleMetaInfo roleMetaInfo){
+        getRoleUri(roleMetaInfo);
     }
 
-    public void registerRole(RoleInfo roleInfo, List<ServiceObject> sos , String protocolName){
+    public void registerRole(RoleMetaInfo roleMetaInfo, List<ServiceObject> sos , String protocolName){
         //暴露该角色
-        String roleUri = getRoleUri(roleInfo);
+        String roleUri = getRoleUri(roleMetaInfo);
         for(ServiceObject so:sos) {
-            ServiceInfo serviceInfo = registerService(so, protocolName, roleInfo.getPort());
+            ServiceInfo serviceInfo = registerService(so, protocolName, roleMetaInfo.getPort());
             exportService(serviceInfo,roleUri);
         }
     }
 
 
-    private String getRoleUri(RoleInfo roleInfo) {
-            String uri = JSON.toJSONString(roleInfo);
+    private String getRoleUri(RoleMetaInfo roleMetaInfo) {
+            String uri = JSON.toJSONString(roleMetaInfo);
         try {
             uri = URLEncoder.encode(uri, "UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -88,8 +88,7 @@ public class ZookeeperRoleAndServiceInfoRegister extends DefaultServiceRegister 
         if (client.exists(uriPath)) {
             client.delete(uriPath);
         }
-        // TODO: 2020/3/19 先改成永久的用于调试
-        client.createPersistent(uriPath);
+        client.createEphemeral(uriPath);
     }
 
 }
