@@ -27,6 +27,17 @@ public class Topic implements Serializable{
         queues=new HashMap<>();
     }
 
+    public Topic(String topicName, int queueNum, HashMap<String, List<Integer>> queues) {
+        this.topicName = topicName;
+        this.queueNum = queueNum;
+        this.queues = queues;
+    }
+
+    public Topic(String topicName, HashMap<String, List<Integer>> queues) {
+        this.topicName = topicName;
+        this.queues = queues;
+    }
+
     public String getTopicName() {
         return topicName;
     }

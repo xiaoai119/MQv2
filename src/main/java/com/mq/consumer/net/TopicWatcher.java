@@ -1,8 +1,7 @@
-package com.mq.producer.net;
+package com.mq.consumer.net;
 
-
-import com.mq.producer.meta.SingletonProducerTopicManager;
-import com.mq.producer.meta.ProducerTopicManager;
+import com.mq.consumer.meta.ConsumerTopicManager;
+import com.mq.consumer.meta.SingletonConsumerTopicManger;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
@@ -11,14 +10,17 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
- * Created By xfj on 2020/3/23
+ * Created By xfj on 2020/6/3
  */
-public class TopicWatcher extends ZooKeeperWatcher {
-    ProducerTopicManager producerTopicManager;
+public class TopicWatcher extends ZooKeeperWatcher{
+    ConsumerTopicManager consumerTopicManager;
 
     public TopicWatcher(String path) {
         super.createConnection(path);
-        producerTopicManager = SingletonProducerTopicManager.getInstance();
+        consumerTopicManager = SingletonConsumerTopicManger.getInstance();
+        while(true) {
+            //监听
+        }
     }
 
     @Override
@@ -38,7 +40,7 @@ public class TopicWatcher extends ZooKeeperWatcher {
                 }
                 try {
                     setWatch(path, zk);// 每次监听消费后，需要重新增加Watcher
-                    producerTopicManager.updateTopic();
+                    consumerTopicManager.updateTopic();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -52,9 +54,9 @@ public class TopicWatcher extends ZooKeeperWatcher {
         }
     }
 
-//    public static void main(String[] args) {
-//        Executors.newSingleThreadExecutor().execute(() -> {
-//            TopicWatcher watcher = new TopicWatcher("/com/mq/topics");
-//        });
-//    }
+    public static void main(String[] args) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            TopicWatcher watcher = new TopicWatcher("/com/mq/topics");
+        });
+    }
 }

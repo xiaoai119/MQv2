@@ -1,6 +1,5 @@
 package com.mq.broker.meta;
 
-import com.mq.broker.common.MyQueue;
 import com.mq.common.message.Message;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class QueueManager {
     Integer  queueIndex;
-    private ConcurrentHashMap<Integer,ArrayBlockingQueue> queueMap;//队列
+    private ConcurrentHashMap<Integer,MyQueue> queueMap;//队列
 
     public void sendToBroker(List<Message> messages,Integer key){
 
@@ -28,11 +27,22 @@ public class QueueManager {
         ArrayList<Integer> index = new ArrayList<>();
         synchronized (queueMap){
             for(int i=0;i<queueNum;i++){
-                queueMap.put(queueIndex,new ArrayBlockingQueue(10000));
+                queueMap.put(queueIndex,new MyQueue());
                 index.add(queueIndex);
                 queueIndex++;
             }
         }
         return index;
     }
+
+    public MyQueue getQueue(int queueIndex){
+        return queueMap.getOrDefault(queueIndex,new MyQueue());
+    }
+
+    public synchronized List<Message> getMessages(int queueIndex,int maxSize){
+        MyQueue queue = getQueue(queueIndex);
+        List<Message> messages = queue.drainTo(maxSize);
+        return messages;
+    }
+
 }

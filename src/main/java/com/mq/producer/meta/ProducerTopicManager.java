@@ -26,7 +26,7 @@ public class ProducerTopicManager {
     public void initTopics(){
         List<Topic> allTopics = topicDiscover.getAllTopics();
         for (Topic topic : allTopics) {
-            System.out.println("获取topic"+topic.getTopicName());
+            System.out.println("获取topic"+topic.getTopicName()+ JSON.toJSONString(topic));
             topics.put(topic.getTopicName(),topic);
         }
     }

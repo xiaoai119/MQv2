@@ -30,13 +30,16 @@ public class JSONMessageProtocol implements MessageProtocol {
 		Request req = JSON.parseObject(data, Request.class);
 		if (req.getParameters() != null) {
 			// TODO
+
+
 		}
-		return null;
+		return req;
 	}
 
 	@Override
 	public byte[] marshallingResponse(Response rsp) {
 		// TODO Auto-generated method stub
+
 		return null;
 	}
 

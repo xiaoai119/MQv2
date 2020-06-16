@@ -10,4 +10,5 @@ import java.util.List;
 public interface BrokerService {
     List<Message> sendToBrokerBatch(List<Message> messages,Integer queueIndex);
     List<Message> SycSendToBroker(List<Message> messages);
+    void sendPushRequestTobroker(String consumerName, String topicName, List<Integer> indexes,int transSize);
 }

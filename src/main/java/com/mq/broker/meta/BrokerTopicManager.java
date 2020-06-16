@@ -1,5 +1,6 @@
 package com.mq.broker.meta;
 
+import com.alibaba.fastjson.JSON;
 import com.mq.broker.net.ZookeeperTopicRegister;
 import com.mq.common.QueueInfoOfTopic;
 import com.mq.common.Topic;
@@ -58,11 +59,12 @@ public class BrokerTopicManager {
         }
         //向zk注册或更新topic信息
         zookeeperTopicRegister.updateTopic(new QueueInfoOfTopic(topic.getTopicName(),brokerMetaInfo.getName(),queues));
+        System.out.println(brokerMetaInfo.getName()+"注册Topic"+topic.getTopicName()+ JSON.toJSONString(topic));
         return true;
     }
 
     public static void main(String[] args) throws UnknownHostException {
-        BrokerMetaInfo brokerMetaInfo = new BrokerMetaInfo(InetAddress.getLocalHost().getHostAddress(), 8118,"broker3",new ArrayList<String>());
+        BrokerMetaInfo brokerMetaInfo = new BrokerMetaInfo(InetAddress.getLocalHost().getHostAddress(), 8118,"broker3",new ArrayList<Topic>());
         BrokerTopicManager brokerTopicManager = new BrokerTopicManager(brokerMetaInfo);
         Topic testTopic = new Topic("testTopic3",10);
         brokerTopicManager.updateTopic(testTopic);

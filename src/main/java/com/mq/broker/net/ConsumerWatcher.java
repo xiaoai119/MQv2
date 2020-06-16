@@ -1,24 +1,25 @@
-package com.mq.producer.net;
+package com.mq.broker.net;
 
-
-import com.mq.producer.meta.SingletonProducerTopicManager;
-import com.mq.producer.meta.ProducerTopicManager;
+import com.mq.broker.meta.ConsumerManager;
+import com.mq.broker.meta.SingletonConsumerManager;
+import com.mq.common.role.BrokerMetaInfo;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
 /**
- * Created By xfj on 2020/3/23
+ * Created By xfj on 2020/6/3
+ * 发现consumer，并在consumerManager中维护consumer信息
  */
-public class TopicWatcher extends ZooKeeperWatcher {
-    ProducerTopicManager producerTopicManager;
-
-    public TopicWatcher(String path) {
+public class ConsumerWatcher extends ZooKeeperWatcher {
+    ConsumerManager consumerManager;
+    BrokerMetaInfo brokerMetaInfo;
+    public ConsumerWatcher(String path,BrokerMetaInfo brokerMetaInfo) {
         super.createConnection(path);
-        producerTopicManager = SingletonProducerTopicManager.getInstance();
+        consumerManager = SingletonConsumerManager.getInstance();
+        this.brokerMetaInfo=brokerMetaInfo;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class TopicWatcher extends ZooKeeperWatcher {
                 }
                 try {
                     setWatch(path, zk);// 每次监听消费后，需要重新增加Watcher
-                    producerTopicManager.updateTopic();
+                    consumerManager.updateConsumeInfos(brokerMetaInfo);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -51,10 +52,4 @@ public class TopicWatcher extends ZooKeeperWatcher {
             }
         }
     }
-
-//    public static void main(String[] args) {
-//        Executors.newSingleThreadExecutor().execute(() -> {
-//            TopicWatcher watcher = new TopicWatcher("/com/mq/topics");
-//        });
-//    }
 }
