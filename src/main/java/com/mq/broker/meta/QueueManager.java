@@ -36,7 +36,8 @@ public class QueueManager {
     }
 
     public MyQueue getQueue(int queueIndex){
-        return queueMap.getOrDefault(queueIndex,new MyQueue());
+//        return queueMap.getOrDefault(queueIndex,new MyQueue());
+        return queueMap.get(queueIndex);
     }
 
     public synchronized List<Message> getMessages(int queueIndex,int maxSize){

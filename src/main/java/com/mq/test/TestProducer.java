@@ -15,14 +15,13 @@ public class TestProducer {
 
         ArrayList<Message> objects = new ArrayList<>();
 
-        for(int i=0;i<5;i++){
+        for(int i=0;i<100;i++){
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     ArrayList<Message> objects1 = new ArrayList<>();
-                    for(int j=0;j<3;j++)
+                    for(int j=0;j<5;j++)
                     objects1.add(new Message("test0", MessageType.REPLY_EXPECTED,"testTopic1", 1));
-
                     producer.sendBatch(objects1);
                 }
             }).start();

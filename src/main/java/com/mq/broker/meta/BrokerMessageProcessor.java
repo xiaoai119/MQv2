@@ -11,6 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Created By xfj on 2020/6/10
@@ -57,13 +62,51 @@ public class BrokerMessageProcessor {
                 //向cache中添加待发送消息
                 queueCache.add(entry.getKey(),message);
             }
-            doPushMessages(consumerName, messagesToSendList,transSize);
+        }
+        List<Message> messages = doPushMessages(consumerName, messagesToSendList, transSize);
+        List<String> keys = messages.stream().map(message -> message.getUuid()).collect(Collectors.toList());
+//        deleteFrpmCache(messagesToSend, keys);
+    }
+
+    private void deleteFrpmCache(HashMap<Integer, List<Message>> messagesToSend, List<String> keys) {
+        for (Map.Entry<Integer, List<Message>> entry : messagesToSend.entrySet()) {
+            for (Message message : entry.getValue()) {
+                //向cache中添加待发送消息
+                if(keys.contains(message.getUuid()))
+                queueCache.remove(message.getUuid(),entry.getKey());
+            }
         }
     }
 
-    private void doPushMessages(String consumerName, ArrayList<Message> messagesToSendList,int transSize) {
+    private List<Message> doPushMessages(String consumerName, ArrayList<Message> messagesToSendList,int transSize) {
         ConsumerService rpcProxy = rpcManager.getRPCProxy(ConsumerService.class, consumerName);// 获取远程服务代理
-        rpcProxy.sendMessageToConsumer(messagesToSendList,transSize);
+        return rpcProxy.sendMessageToConsumer(messagesToSendList, transSize);
+    }
+
+    public void reSendMessage(int outTime,int executeTime){
+        ReSendMessageTask reSendMessageTask = new ReSendMessageTask(outTime);
+        ScheduledExecutorService scheduledReSendMessage = Executors.newScheduledThreadPool(1);
+        scheduledReSendMessage.scheduleAtFixedRate(reSendMessageTask, 0, executeTime, TimeUnit.MILLISECONDS);
+    }
+
+    class ReSendMessageTask implements Runnable {
+        int outTime;
+
+        public ReSendMessageTask(int outTime) {
+            this.outTime = outTime;
+        }
+
+        @Override
+        public void run() {
+            ConcurrentHashMap<Integer, List<Message>> outTimeMessage = queueCache.getOutTimeMessage(outTime);
+            for (Map.Entry<Integer, List<Message>> entry : outTimeMessage.entrySet()) {
+                if(!entry.getValue().isEmpty()){
+                    MyQueue queue = queueManager.getQueue(entry.getKey());
+                    queue.addAll(entry.getValue());
+                    System.out.println("重新发送"+entry.getValue().size()+"条消息");
+                }
+            }
+        }
     }
 
 }

@@ -29,7 +29,7 @@ public class Cursor {
     //将需要发送的message drainTo到list中
     public HashMap<Integer,List<Message>> getMessagesToSend(List<Integer> indexes,int tranSize){
         //这里采取的策略是随机分配
-        int maxIter=1000;
+        int maxIter=100;
         HashMap<Integer, List<Message>> result = new HashMap<>();
         int sendSize=tranSize<maxBatchSize?tranSize:maxBatchSize;
         int iter=0;

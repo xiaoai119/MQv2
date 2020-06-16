@@ -5,7 +5,7 @@ import com.mq.common.message.Message;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created By xfj on 2020/6/3
@@ -15,7 +15,7 @@ public class Buffer {
     private ArrayBlockingQueue<Message> buffer;
     int capacity;
     //预分配容量，这里先不考虑上下溢的问题
-    int preAllocateSize;
+    AtomicInteger preAllocateSize;
     //设置阈值。若容量超过阈值则暂时不可继续发起pushRequest
     double requestThreshold;
 
@@ -23,18 +23,18 @@ public class Buffer {
     public Buffer(int capacity,double requestThreshold) {
         buffer = new ArrayBlockingQueue<Message>(capacity);
         this.capacity=capacity;
-        preAllocateSize=0;
+        preAllocateSize=new AtomicInteger(0);
         this.requestThreshold=requestThreshold;
     }
 
-    public synchronized int getRemainCapacity(){
-        return capacity-buffer.size()-preAllocateSize;
+    public int getRemainCapacity(){
+        return capacity-buffer.size()-preAllocateSize.get();
     }
 
     //预分配buffer容量
-    public synchronized boolean preAllocate(int size){
+    public boolean preAllocate(int size){
         if(getRemainCapacity()>size){
-            preAllocateSize+=size;
+            preAllocateSize.getAndAdd(size);
             return true;
         }
         return false;
@@ -46,16 +46,16 @@ public class Buffer {
      * @return
      */
     public synchronized boolean relese(int releseSize){
-        if(preAllocateSize>releseSize&&releseSize>0){
+        if(preAllocateSize.get()>releseSize&&releseSize>0){
             System.out.println("释放buffet大小"+releseSize);
-            preAllocateSize-=releseSize;
+            preAllocateSize.getAndAdd(-releseSize);
             return true;
         }
         return false;
     }
 
     //根据当前容量与阈值判断是否可以向broker发起push请求
-    public synchronized boolean canRequest(){
+    public boolean canRequest(){
         if((double)getRemainCapacity()/capacity>(1-requestThreshold))
             return true;
         return false;

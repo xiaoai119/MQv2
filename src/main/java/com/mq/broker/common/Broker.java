@@ -58,6 +58,7 @@ public class Broker {
         brokerMessageProcessor = new BrokerMessageProcessor(queueCache, queueManager, cursor, maxBatch, rpcManager);
 
         openConsumeInfoWatcher();
+        openReSendToConsumer(1000,500);
     }
 
 
@@ -86,7 +87,6 @@ public class Broker {
         init();
     }
 
-
     public void rigisterTopics(List<Topic> topics) {
         for (Topic topic : topics) {
             updateTopic(topic);
@@ -101,6 +101,10 @@ public class Broker {
         Executors.newSingleThreadExecutor().execute(() -> {
             ConsumerWatcher watcher = new ConsumerWatcher("/com/mq/consumer", brokerMetaInfo);
         });
+    }
+
+    private void openReSendToConsumer(int outTime,int excuteTime){
+//        brokerMessageProcessor.reSendMessage(outTime,excuteTime);
     }
 
     public boolean rigisterTopic(Topic topic) {

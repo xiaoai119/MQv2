@@ -38,7 +38,7 @@ public class ConsumerMessageProcessor {
      * 向broker发送push请求
      * 这里可以
      */
-    public void sendPushRequestTobroker(){
+    public synchronized void sendPushRequestTobroker(){
         //策略是取剩余容量的一半进行预分配
         int remainCapacity = buffer.getRemainCapacity();
         int requestSize=(int)remainCapacity/4;
@@ -46,7 +46,6 @@ public class ConsumerMessageProcessor {
             System.out.println("预分配size"+requestSize+"失败,或buffer达到阈值");
             return;
         }
-
         Topic topic = allocator.randomAllocate();
         sendPushRequestTobroker(topic,requestSize);
     }
@@ -65,7 +64,7 @@ public class ConsumerMessageProcessor {
     public void timedSendPushRequest() {
         ScheduledExecutorService scheduledSendPushRequest = Executors.newScheduledThreadPool(4);
         SendPushRequestTask task = new SendPushRequestTask();
-        scheduledSendPushRequest.scheduleAtFixedRate(task, 0, 500, TimeUnit.MILLISECONDS);
+        scheduledSendPushRequest.scheduleAtFixedRate(task, 0, 125, TimeUnit.MILLISECONDS);
         scheduledSendPushRequest.scheduleAtFixedRate(task, 125, 500, TimeUnit.MILLISECONDS);
         scheduledSendPushRequest.scheduleAtFixedRate(task, 250, 500, TimeUnit.MILLISECONDS);
         scheduledSendPushRequest.scheduleAtFixedRate(task, 375, 500, TimeUnit.MILLISECONDS);
