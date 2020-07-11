@@ -1,4 +1,4 @@
-package com.mq.broker.net;
+package com.mq.broker.discover;
 
 import com.alibaba.fastjson.JSON;
 import com.rpc.discovery.ServiceInfo;

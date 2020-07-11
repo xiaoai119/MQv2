@@ -22,6 +22,8 @@ public class MyQueue implements Serializable {
         queue.add(value);
     }
 
+
+
     public void addAll(List<Message> messages){
         queue.addAll(messages);
     }

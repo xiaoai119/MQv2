@@ -14,7 +14,7 @@ public class TestBroker1 {
         BrokerMetaInfo brokerMetaInfo = new BrokerMetaInfo("127.0.0.1", 8118,"broker1",new ArrayList<Topic>());
         Broker broker = new Broker(brokerMetaInfo);
         Topic topic = new Topic("testTopic1",10);
-        Topic topic1 = new Topic("testTopic2",2);
+        Topic topic1 = new Topic("testTopic1",2);
 
         broker.rigisterTopic(topic);
         broker.rigisterTopic(topic1);

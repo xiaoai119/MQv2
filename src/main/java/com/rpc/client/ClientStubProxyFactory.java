@@ -32,7 +32,6 @@ public class ClientStubProxyFactory {
 					new ClientStubInvocationHandler(interf));
 			this.objectCache.put(interf.getName(), obj);
 		}
-
 		return obj;
 	}
 

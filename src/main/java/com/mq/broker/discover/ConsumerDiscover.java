@@ -1,4 +1,4 @@
-package com.mq.broker.net;
+package com.mq.broker.discover;
 
 import com.alibaba.fastjson.JSON;
 import com.mq.common.QueueInfoOfTopic;
@@ -12,7 +12,6 @@ import org.I0Itec.zkclient.ZkClient;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

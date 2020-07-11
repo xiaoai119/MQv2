@@ -1,8 +1,5 @@
 package com.mq.broker.meta;
 
-import com.mq.rigister.SigletonZookeeperRoleAndServiceRegister;
-import com.mq.rigister.ZookeeperRoleAndServiceInfoRegister;
-
 /**
  * Created By xfj on 2020/3/23
  */

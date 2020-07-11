@@ -1,7 +1,7 @@
 package com.mq.broker.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.mq.broker.net.ConsumerDiscover;
+import com.mq.broker.discover.ConsumerDiscover;
 import com.mq.common.role.BrokerMetaInfo;
 import com.mq.common.role.ConsumeInfo;
 

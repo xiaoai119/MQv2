@@ -1,7 +1,7 @@
 package com.mq.broker.meta;
 
 import com.alibaba.fastjson.JSON;
-import com.mq.broker.net.ZookeeperTopicRegister;
+import com.mq.broker.rigister.ZookeeperTopicRegister;
 import com.mq.common.QueueInfoOfTopic;
 import com.mq.common.Topic;
 import com.mq.common.role.BrokerMetaInfo;

@@ -1,4 +1,4 @@
-package com.mq.broker.net;
+package com.mq.broker.rigister;
 
 import com.alibaba.fastjson.JSON;
 import com.mq.common.QueueInfoOfTopic;

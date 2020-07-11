@@ -1,5 +1,6 @@
 package com.mq.broker.net;
 
+import com.mq.broker.discover.ConsumerServiceDiscover;
 import com.rpc.client.ClientStubProxyFactory;
 import com.rpc.client.net.NettyNetClient;
 import com.rpc.common.protocol.JavaSerializeMessageProtocol;

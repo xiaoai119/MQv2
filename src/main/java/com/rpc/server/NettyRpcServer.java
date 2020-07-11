@@ -26,8 +26,8 @@ public class NettyRpcServer extends RpcServer {
 	@Override
 	public void start() {
 		// 配置服务器
-		EventLoopGroup bossGroup = new NioEventLoopGroup(4);
-		EventLoopGroup workerGroup = new NioEventLoopGroup(30);
+		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+		EventLoopGroup workerGroup = new NioEventLoopGroup(4);
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 100)
@@ -73,6 +73,7 @@ public class NettyRpcServer extends RpcServer {
 			ByteBuf msgBuf = (ByteBuf) msg;
             byte[] req = new byte[msgBuf.readableBytes()];
 			msgBuf.readBytes(req);
+			//发起调用
 			byte[] res = handler.handleRequest(req);
 			logger.info("发送响应：" + msg);
 			ByteBuf respBuf = Unpooled.buffer(res.length);

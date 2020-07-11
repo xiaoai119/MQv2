@@ -2,12 +2,8 @@ package com.mq.consumer.net;
 
 import com.alibaba.fastjson.JSON;
 
-import com.mq.broker.meta.BrokerTopicManager;
-import com.mq.broker.net.ZookeeperTopicRegister;
 import com.mq.common.Topic;
-import com.mq.common.role.BrokerMetaInfo;
 import com.mq.common.role.ConsumerMetaInfo;
-import com.mq.consumer.meta.ConsumerTopicManager;
 import com.rpc.discovery.ServiceInfo;
 import com.rpc.server.register.DefaultServiceRegister;
 import com.rpc.server.register.MyZkSerializer;
@@ -19,7 +15,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

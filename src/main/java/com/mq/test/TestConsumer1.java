@@ -31,14 +31,9 @@ public class TestConsumer1 {
             for(int i=10;i<15;i++){
                 integers.add(i);
             }
-//            Topic topic2 = Allocator.assembleTopic("testTopic2", "broker1", integers);
-//            Topic topic3 = Allocator.assembleTopic("testTopic2", "broker2", integers);
 
-//            consumer.allocateTopicAndQueueIndex(topic2);
-//            consumer.allocateTopicAndQueueIndex(topic3);
-
-            consumer.openDynamicPush();
-            consumer.openSimulateConsumption(3, 200);
+//            consumer.openDynamicPush();
+//            consumer.openSimulateConsumption(3, 200);
             consumer.start();
 
 

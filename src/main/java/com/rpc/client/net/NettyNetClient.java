@@ -76,6 +76,7 @@ public class NettyNetClient implements NetClient {
 		public Object rspData() {
 
 			try {
+				//未返回之前阻塞
 				cdl.await();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
