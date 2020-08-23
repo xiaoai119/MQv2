@@ -17,6 +17,7 @@ import java.util.concurrent.Executors;
  */
 public class TopicWatcher extends ZooKeeperWatcher {
     ConsumerTopicManager consumerTopicManager;
+    int transid=0;
 
     public TopicWatcher(String path) {
         super.createConnection(path);
@@ -33,7 +34,7 @@ public class TopicWatcher extends ZooKeeperWatcher {
 
         @Override
         public void update() {
-            consumerTopicManager.updateTopic();
+            consumerTopicManager.updateTopic(transid++);
         }
     }
 }

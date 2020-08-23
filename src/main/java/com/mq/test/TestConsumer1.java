@@ -32,11 +32,9 @@ public class TestConsumer1 {
                 integers.add(i);
             }
 
-//            consumer.openDynamicPush();
-//            consumer.openSimulateConsumption(3, 200);
+            consumer.openDynamicPush();
+            consumer.openSimulateConsumption(3, 200);
             consumer.start();
-
-
         }
     }
 

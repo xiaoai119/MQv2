@@ -3,6 +3,7 @@ package com.mq.broker.rigister;
 import com.alibaba.fastjson.JSON;
 import com.mq.common.QueueInfoOfTopic;
 import com.mq.common.Topic;
+import com.mq.zklock.ZooKeeperDistributionLock;
 import com.rpc.server.register.MyZkSerializer;
 import com.rpc.util.PropertiesUtils;
 import org.I0Itec.zkclient.ZkClient;
@@ -19,8 +20,9 @@ import java.util.Map;
 public class ZookeeperTopicRegister {
     ZkClient client;
     private String centerRootPath = "/com/mq";
-
+    ZooKeeperDistributionLock zooKeeperDistributionLock;
     public ZookeeperTopicRegister() {
+        zooKeeperDistributionLock = new ZooKeeperDistributionLock(centerRootPath + "/lock");
         String addr = PropertiesUtils.getProperties("zk.address");
         client = new ZkClient(addr);
         client.setZkSerializer(new MyZkSerializer());
@@ -35,6 +37,7 @@ public class ZookeeperTopicRegister {
             client.createPersistent(path);
         }
 
+        zooKeeperDistributionLock.lock();
         //检查该节点下是否已存在对应的broker节点，若有则先删除再创建
         List<String> children = client.getChildren(path);
         for (String child : children) {
@@ -51,6 +54,7 @@ public class ZookeeperTopicRegister {
         }
 
         createTopicNode(queueInfoOfTopic);
+        zooKeeperDistributionLock.unlock();
         return true;
 
 //        if(!client.exists(path)){

@@ -34,6 +34,7 @@ public class ConsumerWatcher extends ZooKeeperWatcher {
 
         @Override
         public void update() {
+            System.out.println("更新consumer");
             consumerManager.updateConsumeInfos(brokerMetaInfo);
         }
     }

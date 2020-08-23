@@ -20,12 +20,17 @@ public class ProducerMessageProcessor {
     private volatile CopyOnWriteArrayList<Message> ackMessage;
     private volatile CopyOnWriteArrayList<Future<List<Message>>> batchTasks;
     private volatile BlockingQueue<Message> timeOutQueue;
-    private static int TIME_OUT = 3000;
+
+    //timeOut可以使用学习机制
+    private volatile long TIME_OUT = 3000;
 
     private SendQueueManager queueManager;//消息发送队列管理
     private Router router;//消息路由
     private RPCManager rpcManager;//用于获取rpc代理
     private Integer batchSize = 3;
+
+    private volatile double retryTime=0;
+    private volatile int ackNum=0;
 
     public ProducerMessageProcessor() {
         sendRecord = new ConcurrentHashMap<>();
@@ -131,6 +136,7 @@ public class ProducerMessageProcessor {
                 for (Message message : ackMessage) {
                     if (sendRecord.containsKey(message.getUuid())) {
                         sendRecord.remove(message.getUuid());
+                        TIME_OUT=Math.round(0.9*TIME_OUT+0.2*(System.currentTimeMillis()-message.getTimeStamp()));
                         ackMessage.remove(message);
                         System.out.println("收到回复" + message.getUuid());
                     } else {
@@ -150,10 +156,27 @@ public class ProducerMessageProcessor {
     }
 
     //retry timeOutQueue中的message,这部分用同步发送
-    // TODO: 2020/3/19  retry策略，先指数再线性
-    public void syncRetry() {
-        //
+       public void retry() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<Message> messages = new ArrayList<>();
+                Random random = new Random();
+                while(true){
+                    timeOutQueue.drainTo(messages);
+                    sendBatch(messages);
+                    try {
+                        //100至500毫秒之间随机sleep
+                        Thread.sleep(random.nextInt(400)+100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
+
+
 
     // TODO: 2020/3/19 死信队列 持久化
     public void durableDeadMessages() {

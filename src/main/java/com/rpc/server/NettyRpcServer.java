@@ -27,11 +27,12 @@ public class NettyRpcServer extends RpcServer {
 	public void start() {
 		// 配置服务器
 		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-		EventLoopGroup workerGroup = new NioEventLoopGroup(4);
+		EventLoopGroup workerGroup = new NioEventLoopGroup(3);
 		try {
 			ServerBootstrap b = new ServerBootstrap();
 			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).option(ChannelOption.SO_BACKLOG, 100)
                     .option(ChannelOption.ALLOCATOR,new PreferHeapByteBufAllocator(new PooledByteBufAllocator()))
+					.childOption(ChannelOption.SO_KEEPALIVE, true)
 					.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new ChannelInitializer<SocketChannel>() {
 						@Override
 						public void initChannel(SocketChannel ch) throws Exception {

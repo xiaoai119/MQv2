@@ -42,6 +42,8 @@ public class ConsumerMessageProcessor {
         //策略是取剩余容量的一半进行预分配
         int remainCapacity = buffer.getRemainCapacity();
         int requestSize=(int)remainCapacity/4;
+
+        //预分配，这里需要加锁
         if(!buffer.preAllocate(requestSize)||!buffer.canRequest()){
             System.out.println("预分配size"+requestSize+"失败,或buffer达到阈值");
             return;

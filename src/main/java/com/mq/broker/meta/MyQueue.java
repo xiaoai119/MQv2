@@ -8,15 +8,18 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Created By xfj on 2020/3/15
  */
 public class MyQueue implements Serializable {
-    private ArrayBlockingQueue<Message> queue;
+    private CopyOnWriteArrayList<Message> queue;
 
     public MyQueue() {
-        queue = new ArrayBlockingQueue<Message>(10000);
+        queue = new CopyOnWriteArrayList<Message>();
     }
     public void putAtHeader(Message value) {
         queue.add(value);
@@ -44,9 +47,12 @@ public class MyQueue implements Serializable {
         System.out.println();
     }
 
-    public List<Message> drainTo(int size){
-        List<Message> messages = new ArrayList<>(size);
-        queue.drainTo(messages,size);
+    public List<Message> drainTo(int size,int from){
+        List<Message> messages=null;
+        if(from+size<queue.size())
+            messages = queue.subList(from, from + size);
+        else
+            messages=queue.subList(from,queue.size());
         return messages;
     }
 

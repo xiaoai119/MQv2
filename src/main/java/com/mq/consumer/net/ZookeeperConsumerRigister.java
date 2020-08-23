@@ -31,7 +31,6 @@ public class ZookeeperConsumerRigister extends DefaultServiceRegister {
         client.setZkSerializer(new MyZkSerializer());
     }
 
-
     //
     public void registerConsumer(ConsumerMetaInfo consumerMetaInfo) {
         String consumerMetaUri = getConsumerMetaUri(consumerMetaInfo);

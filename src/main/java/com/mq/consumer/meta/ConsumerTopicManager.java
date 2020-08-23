@@ -21,7 +21,7 @@ public class ConsumerTopicManager {
     ConcurrentHashMap<String,Topic> topics;
     TopicDiscover topicDiscover;
     ConsumerTopicRegister consumerTopicRegister;
-
+    volatile int currenttransid=-1;
 
     public ConsumerTopicManager(){
         this.topics = new ConcurrentHashMap<>();
@@ -53,11 +53,15 @@ public class ConsumerTopicManager {
     /**
      * 更新本地topic列表
      */
-    public void updateTopic(){
+    public void updateTopic(int transid){
         List<Topic> allTopics = topicDiscover.getAllTopics();
-        for (Topic topic : allTopics) {
-            topics.put(topic.getTopicName(),topic);
-            System.out.println("producer更新topic"+topic.getTopicName()+ JSON.toJSONString(topic));
+        if(transid>currenttransid)
+        synchronized (this){
+            for (Topic topic : allTopics) {
+                topics.put(topic.getTopicName(),topic);
+                System.out.println("producer更新topic"+topic.getTopicName()+ JSON.toJSONString(topic));
+            }
+            currenttransid=transid;
         }
     }
 

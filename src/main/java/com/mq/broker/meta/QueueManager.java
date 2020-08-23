@@ -40,9 +40,9 @@ public class QueueManager {
         return queueMap.get(queueIndex);
     }
 
-    public synchronized List<Message> getMessages(int queueIndex,int maxSize){
+    public synchronized List<Message> getMessages(int queueIndex,int maxSize,int p){
         MyQueue queue = getQueue(queueIndex);
-        List<Message> messages = queue.drainTo(maxSize);
+        List<Message> messages = queue.drainTo(maxSize,p);
         return messages;
     }
 

@@ -1,6 +1,7 @@
 package com.mq.broker.meta;
 
 import com.alibaba.fastjson.JSON;
+import com.mq.broker.cursor.Cursor;
 import com.mq.broker.discover.ConsumerDiscover;
 import com.mq.common.role.BrokerMetaInfo;
 import com.mq.common.role.ConsumeInfo;
@@ -32,6 +33,7 @@ public class ConsumerManager {
                 queueIndexOfConsumer.put(i,consumeInfo.getConsumerName());
             }
             System.out.println("更新"+consumeInfo.getConsumerName()+":"+ JSON.toJSONString(consumeInfo));
+//            Cursor.updateCursor();
         }
     }
 

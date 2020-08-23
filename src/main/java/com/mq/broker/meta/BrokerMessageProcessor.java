@@ -54,7 +54,7 @@ public class BrokerMessageProcessor {
     }
 
     public void pushMessage(String consumerName, List<Integer> indexes, int transSize){
-        HashMap<Integer, List<Message>> messagesToSend = cursor.getMessagesToSend(indexes, transSize);
+        HashMap<Integer, List<Message>> messagesToSend = cursor.getMessagesToSend(indexes, transSize,consumerName);
         ArrayList<Message> messagesToSendList = new ArrayList<>();
         for (Map.Entry<Integer, List<Message>> entry : messagesToSend.entrySet()) {
             messagesToSendList.addAll(entry.getValue());
