@@ -22,10 +22,10 @@ public class TestConsumer1 {
                 integers.add(i);
             }
             Topic topic = Allocator.assembleTopic("testTopic1", "broker1", integers);
-//            Topic topic1 = Allocator.assembleTopic("testTopic1", "broker2", integers);
+            Topic topic1 = Allocator.assembleTopic("testTopic1", "broker2", integers);
 
             consumer.allocateTopicAndQueueIndex(topic);
-//            consumer.allocateTopicAndQueueIndex(topic1);
+            consumer.allocateTopicAndQueueIndex(topic1);
 
             integers.clear();
             for(int i=10;i<15;i++){

@@ -15,7 +15,7 @@ public class TestProducer {
 
         ArrayList<Message> objects = new ArrayList<>();
 
-        for(int i=0;i<10;i++){
+        for(int i=0;i<100;i++){
             new Thread(new Runnable() {
                 @Override
                 public void run() {
